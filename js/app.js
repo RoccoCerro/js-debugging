@@ -44,7 +44,7 @@ const books = [
         "author": "Maccio Capatonda",
         "title": "Libro",
         "firstPublishingYear": "2020",
-        "genres": ["humour"],
+        "genres": ["biography"],
         "originalLanguage": "Italiano",
         "pages": "222",
         "rating": "10"
@@ -54,7 +54,7 @@ const books = [
         "author": "Andrea Camilleri",
         "title": "La prima indagine di Montalbano",
         "firstPublishingYear": "2013",
-        "genres": ["thriller", "stories"],
+        "genres": ["adventure","thriller", "stories"],
         "originalLanguage": "Italiano",
         "pages": "340",
         "rating": "8"
@@ -64,10 +64,20 @@ const books = [
         "author": "George Orwell",
         "title": "1984",
         "firstPublishingYear": "1948",
-        "genres": ["science fiction", "dystopia"],
+        "genres": ["scienceFiction","dystopia"],
         "originalLanguage": "Inglese",
         "pages": "333",
         "rating": "9.5"
+    },
+    {
+        "id": 8,
+        "author": "Isaac Asimov",
+        "title": "Io, Robot",
+        "firstPublishingYear": "1950",
+        "genres": ["robot", "stories"],
+        "originalLanguage": "Inglese",
+        "pages": "265",
+        "rating": "7"
     },
     {
         "id": 8,
@@ -89,16 +99,20 @@ const iconsByGenres = {
     fantasy: 'fantasy',
     travels: 'travels',
     biography: 'biography',
+    robot: 'robot',
+    scienceFiction: 'science-fiction',
 };
 
 const genresLabels = {
     adventure: 'Avventura',
-    sea: 'Mare',
-    novel: 'Romanzo',
+    sea: 'mare',
+    novel: 'libro',
     stories: 'Racconti',
     fantasy: 'Fantastico',
     travels: 'Viaggi',
-    biography: 'Autobiografia',
+    biography: 'autobiografia',
+    robot: 'robot',
+    scienceFiction: 'fantascienza',
 };
 
 displayBooks(books);
@@ -107,26 +121,33 @@ function displayBooks(books) {
     const booksContainer = document.querySelector('.books');
 
     books.forEach((book) => {
-        const tags = book.genres.forEach((genre) => {
-            return `<div class="book-tag">${genre}</div>`;
+        const tags = book.genres.map((genre) => {
+            // console.log(`Ho ciclato ${genre}`);
+            return `<div class="book-tag"> ${genre} </div>`;
         });
+        // console.log(tags)
 
         const chars = {
             ',': '',
             '.': '',
             ' ': '',
-            '"': ''
+            '"': '',
+            "'": '',
+
         }
 
         let ratingString = '';
         const rating = book.rating / 2;
-        for (let i = 1; i <= rating; i++) {
+        let stars = 0;
+        for (let i = 1; i < rating; i++) {
             ratingString += '<img src="icons/star.png">';
+            stars++;
         }
         if (rating - parseInt(rating) > 0.5) {
             ratingString += '<img src="icons/half-star.png">';
+            stars++
         }
-        for (let i = rating; i <= 4; i++) {
+        for (let i = stars; i < 5; i++) {
             ratingString += '<img src="icons/star-empty.png">';
         }
 
@@ -144,12 +165,12 @@ function displayBooks(books) {
                 </h2>
                 <h3 class="book-author">di ${book.author}</h3>
                 <div class="book-tags">
-                    ${tags}
+                    ${tags.join('')}
                 </div>
                 <div class="book-rating">
                     ${ratingString}
                 </div>
-                <p class="book-reading-time">Tempo di lettura: ${book.pages / 30}</p>
+                <p class="book-reading-time">Tempo di lettura: ${Math.round(book.pages / 30)} ore</p>
             </div>
         `;
     })
